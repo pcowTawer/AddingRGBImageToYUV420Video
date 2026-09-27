@@ -10,5 +10,9 @@ cmake_minimum_required (VERSION 3.10)
 
 project ("AddingRGBImageToYUV420Video")
 
+set(CMAKE_CXX_STANDARD 11)
+
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 # Включите подпроекты.
 add_subdirectory ("AddingRGBImageToYUV420Video")
