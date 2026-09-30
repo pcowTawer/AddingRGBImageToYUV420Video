@@ -3,6 +3,6 @@
 #
 
 # Добавьте источник в исполняемый файл этого проекта.
-add_executable (AddingRGBImageToYUV420Video "AddingRGBImageToYUV420Video.cpp" "AddingRGBImageToYUV420Video.h")
+add_executable (AddingRGBImageToYUV420Video "AddingRGBImageToYUV420Video.cpp" "AddingRGBImageToYUV420Video.h" "BitmapYUV420.h" "BitmapYUV420.cpp")
 
 # TODO: Добавьте тесты и целевые объекты, если это необходимо.
