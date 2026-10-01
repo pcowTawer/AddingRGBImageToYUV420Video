@@ -275,19 +275,19 @@ int main()
 					converted_bmp.get_width()
 				);
 			};
-			for (size_t i = 0; i < converted_bmp.get_height() / 4; ++i)
+			for (size_t i = 0; i < converted_bmp.get_height() / 2; ++i)
 			{
 				memcpy(
-					frame.get_bytes() + upos1 + i * frame.get_width(),
-					converted_bmp.get_bytes() + upos2 + i * converted_bmp.get_width(),
+					frame.get_bytes() + upos1 + i * frame.get_width() / 2,
+					converted_bmp.get_bytes() + upos2 + i * converted_bmp.get_width() / 2,
 					converted_bmp.get_width() / 2
 				);
 			};
-			for (size_t i = 0; i < converted_bmp.get_height() / 4; ++i)
+			for (size_t i = 0; i < converted_bmp.get_height() / 2; ++i)
 			{
 				memcpy(
-					frame.get_bytes() + vpos1 + i * frame.get_width(),
-					converted_bmp.get_bytes() + vpos2 + i * (size_t)(converted_bmp.get_width()),
+					frame.get_bytes() + vpos1 + i * frame.get_width() / 2,
+					converted_bmp.get_bytes() + vpos2 + i * converted_bmp.get_width() / 2,
 					converted_bmp.get_width() / 2
 				);
 			};
