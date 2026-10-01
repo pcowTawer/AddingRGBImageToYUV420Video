@@ -67,6 +67,9 @@ void BMPImageData::reinitialize()
 std::istream& operator>>(std::istream& istr, BMPImageData& image_data) {
 	if (image_data.bytes != nullptr) delete[] image_data.bytes;
 	image_data.bytes = new uint8_t[image_data.length];
-	istr.read(reinterpret_cast<char*>(image_data.bytes), image_data.length);
+	//Read BMP in reverser order
+	for (int i = image_data.height - 1; i >= 0; i--)
+		istr.read(reinterpret_cast<char*>(image_data.bytes + i * image_data.width * 3), image_data.width * 3);
+		
 	return istr;
 };

@@ -179,7 +179,6 @@ class BMPtoYUVConverter {
 	// Source - https://stackoverflow.com/q/9465815
 	// Posted by Sambatyon, modified by community. See post 'Timeline' for change history
 	// Retrieved 2026-10-01, License - CC BY-SA 3.0
-
 	public:
 	void convert(uint8_t* destination, uint8_t* rgb, size_t width, size_t height)
 	{
@@ -269,19 +268,19 @@ int main()
 				converted_bmp.get_width()
 			);
 		};
-		for (size_t i = 0; i < converted_bmp.get_height() / 2; ++i)
+		for (size_t i = 0; i < converted_bmp.get_height() / 4; ++i)
 		{
 			memcpy(
-				frame.get_bytes() + upos1 + i * frame.get_width() / 2,
+				frame.get_bytes() + upos1 + i * frame.get_width(),
 				converted_bmp.get_bytes() + upos2 + i * converted_bmp.get_width(),
 				converted_bmp.get_width() / 2
 			);
 		};
-		for (size_t i = 0; i < converted_bmp.get_height() / 2; ++i)
+		for (size_t i = 0; i < converted_bmp.get_height() / 4; ++i)
 		{
 			memcpy(
-				frame.get_bytes() + vpos1 + i * frame.get_width() / 2,
-				converted_bmp.get_bytes() + vpos2 + i * (size_t)(converted_bmp.get_width() / 4),
+				frame.get_bytes() + vpos1 + i * frame.get_width(),
+				converted_bmp.get_bytes() + vpos2 + i * (size_t)(converted_bmp.get_width()),
 				converted_bmp.get_width() / 2
 			);
 		};
