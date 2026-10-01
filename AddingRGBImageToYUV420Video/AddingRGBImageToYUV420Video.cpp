@@ -227,65 +227,74 @@ class BMPtoYUVConverter {
 
 int main()
 {
-	string y4m_filepath = 
-		"C:\\Users\\pcow\\Documents\\my-cpp-projects\\"
-		"AddingRGBImageToYUV420Video\\out\\build\\"
-		"x64-debug\\AddingRGBImageToYUV420Video\\flower_cif.y4m";
-	string bmp_filepath = 
-		"C:\\Users\\pcow\\Documents\\my-cpp-projects\\"
-		"AddingRGBImageToYUV420Video\\out\\build\\"
-		"x64-debug\\AddingRGBImageToYUV420Video\\bmp-icon-64x64.bmp";
-	string new_y4m_filepath =
-		"C:\\Users\\pcow\\Documents\\my-cpp-projects\\"
-		"AddingRGBImageToYUV420Video\\out\\build\\"
-		"x64-debug\\AddingRGBImageToYUV420Video\\flower_cif_with_icon.y4m";
-
-	BMPSerializer bmp_serializer;
-	BMPFileData bpm_file_data;
-	bmp_serializer.deserialize(bmp_filepath, bpm_file_data);
-
-	Y4MSerializer y4m_serializer;
-	Y4MFileData y4m_file_data;
-	y4m_serializer.deserialize(y4m_filepath, y4m_file_data);
-
-	BMPtoYUVConverter converter;
-	BMPImageData& bmp = bpm_file_data.image_data;
-	YUV420ImageData converted_bmp(bmp.get_width(), bmp.get_height());
-	converted_bmp.reinitialize();
-	converter.convert(converted_bmp.get_bytes(), bmp.get_bytes(), bmp.get_width(), bmp.get_height());
-
-	size_t upos1 = y4m_file_data.width * y4m_file_data.height;
-	size_t vpos1 = upos1 + upos1 / 4;
-	size_t upos2 = converted_bmp.get_width() * converted_bmp.get_height();
-	size_t vpos2 = upos2 + upos2 / 4;
-
-	for (auto &frame : y4m_file_data.frames) {
-		for (size_t i = 0; i < converted_bmp.get_height(); ++i)
-		{
-			memcpy(
-				frame.get_bytes() + i * frame.get_width(),
-				converted_bmp.get_bytes() + i * converted_bmp.get_width(),
-				converted_bmp.get_width()
-			);
-		};
-		for (size_t i = 0; i < converted_bmp.get_height() / 4; ++i)
-		{
-			memcpy(
-				frame.get_bytes() + upos1 + i * frame.get_width(),
-				converted_bmp.get_bytes() + upos2 + i * converted_bmp.get_width(),
-				converted_bmp.get_width() / 2
-			);
-		};
-		for (size_t i = 0; i < converted_bmp.get_height() / 4; ++i)
-		{
-			memcpy(
-				frame.get_bytes() + vpos1 + i * frame.get_width(),
-				converted_bmp.get_bytes() + vpos2 + i * (size_t)(converted_bmp.get_width()),
-				converted_bmp.get_width() / 2
-			);
-		};
-	}
 	
-	y4m_serializer.serialize(new_y4m_filepath, y4m_file_data);
+	string y4m_filepath;
+	string bmp_filepath;
+	string new_y4m_filepath;
+
+	cout << "y4m filepath: ";
+	getline(std::cin, y4m_filepath);
+	if (y4m_filepath.empty()) y4m_filepath = "C:\\Users\\pcow\\Documents\\my-cpp-projects\\AddingRGBImageToYUV420Video\\AddingRGBImageToYUV420Video\\flower_cif.y4m";
+	cout << "bmp filepath: ";
+	getline(std::cin, bmp_filepath);
+	if (bmp_filepath.empty()) bmp_filepath = "C:\\Users\\pcow\\Documents\\my-cpp-projects\\AddingRGBImageToYUV420Video\\AddingRGBImageToYUV420Video\\bmp-icon-64x64.bmp";
+	cout << "new y4m name: ";
+	getline(std::cin, new_y4m_filepath);
+	if (new_y4m_filepath == "") new_y4m_filepath = "C:\\Users\\pcow\\Documents\\my-cpp-projects\\AddingRGBImageToYUV420Video\\AddingRGBImageToYUV420Video\\flower_cif_with_icon.y4m";
+	else new_y4m_filepath += ".y4m";
+
+	try {
+		BMPSerializer bmp_serializer;
+		BMPFileData bpm_file_data;
+		if (!bmp_serializer.deserialize(bmp_filepath, bpm_file_data)) throw;
+
+		Y4MSerializer y4m_serializer;
+		Y4MFileData y4m_file_data;
+		if (!y4m_serializer.deserialize(y4m_filepath, y4m_file_data)) throw;
+
+		BMPtoYUVConverter converter;
+		BMPImageData & bmp = bpm_file_data.image_data;
+		YUV420ImageData converted_bmp(bmp.get_width(), bmp.get_height());
+		converted_bmp.reinitialize();
+		converter.convert(converted_bmp.get_bytes(), bmp.get_bytes(), bmp.get_width(), bmp.get_height());
+
+		size_t upos1 = y4m_file_data.width * y4m_file_data.height;
+		size_t vpos1 = upos1 + upos1 / 4;
+		size_t upos2 = converted_bmp.get_width() * converted_bmp.get_height();
+		size_t vpos2 = upos2 + upos2 / 4;
+
+		for (auto& frame : y4m_file_data.frames) {
+			for (size_t i = 0; i < converted_bmp.get_height(); ++i)
+			{
+				memcpy(
+					frame.get_bytes() + i * frame.get_width(),
+					converted_bmp.get_bytes() + i * converted_bmp.get_width(),
+					converted_bmp.get_width()
+				);
+			};
+			for (size_t i = 0; i < converted_bmp.get_height() / 4; ++i)
+			{
+				memcpy(
+					frame.get_bytes() + upos1 + i * frame.get_width(),
+					converted_bmp.get_bytes() + upos2 + i * converted_bmp.get_width(),
+					converted_bmp.get_width() / 2
+				);
+			};
+			for (size_t i = 0; i < converted_bmp.get_height() / 4; ++i)
+			{
+				memcpy(
+					frame.get_bytes() + vpos1 + i * frame.get_width(),
+					converted_bmp.get_bytes() + vpos2 + i * (size_t)(converted_bmp.get_width()),
+					converted_bmp.get_width() / 2
+				);
+			};
+		}
+
+		y4m_serializer.serialize(new_y4m_filepath, y4m_file_data);
+	}
+	catch (exception& ex) { 
+		cout << "Somethign went wrong" << endl;
+	}
+	cout << "File saved at " << new_y4m_filepath;
 	return 0;
 }
