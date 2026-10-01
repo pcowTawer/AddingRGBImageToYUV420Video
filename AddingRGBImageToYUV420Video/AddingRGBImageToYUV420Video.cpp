@@ -246,12 +246,15 @@ int main()
 	try {
 		BMPSerializer bmp_serializer;
 		BMPFileData bpm_file_data;
-		if (!bmp_serializer.deserialize(bmp_filepath, bpm_file_data)) throw;
+		if (!bmp_serializer.deserialize(bmp_filepath, bpm_file_data)) throw std::runtime_error("Can open bmp file at " + bmp_filepath);
 
 		Y4MSerializer y4m_serializer;
 		Y4MFileData y4m_file_data;
-		if (!y4m_serializer.deserialize(y4m_filepath, y4m_file_data)) throw;
+		if (!y4m_serializer.deserialize(y4m_filepath, y4m_file_data)) 
+			throw std::runtime_error("Can open bmp file at " + y4m_filepath);
 
+		if (bpm_file_data.image_data.get_height() > y4m_file_data.height || bpm_file_data.image_data.get_width() > y4m_file_data.width)
+			throw std::runtime_error("Error: Image size is larger than frame size");
 		BMPtoYUVConverter converter;
 		BMPImageData & bmp = bpm_file_data.image_data;
 		YUV420ImageData converted_bmp(bmp.get_width(), bmp.get_height());
@@ -290,10 +293,11 @@ int main()
 			};
 		}
 
-		y4m_serializer.serialize(new_y4m_filepath, y4m_file_data);
+		if (!y4m_serializer.serialize(new_y4m_filepath, y4m_file_data)) 
+			throw std::runtime_error("Can open file at " + new_y4m_filepath);
 	}
 	catch (exception& ex) { 
-		cout << "Somethign went wrong" << endl;
+		cout << ex.what() << endl;
 	}
 	cout << "File saved at " << new_y4m_filepath;
 	return 0;
